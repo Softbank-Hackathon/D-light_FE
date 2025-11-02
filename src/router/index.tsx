@@ -6,6 +6,7 @@ import DashboardPage from '../pages/DashboardPage';
 import NewProjectPage from '../pages/NewProjectPage';
 import ProjectPage from '../pages/ProjectPage';
 import DeploymentPage from '../pages/DeploymentPage';
+import AWSConnectionPage from '../pages/AWSConnectionPage';
 
 import HomePage from '../pages/HomePage';
 
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: 'new',
         element: <NewProjectPage />,
+      },
+      {
+        path: 'projects/new/connect-aws',
+        element: <AWSConnectionPage />,
       },
       {
         path: 'projects/:projectId',
