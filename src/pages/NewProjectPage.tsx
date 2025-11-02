@@ -1,50 +1,72 @@
 /**
  * @file NewProjectPage.tsx
- * @description 새 프로젝트를 생성하기 위한 페이지입니다.
- * 프로젝트 이름을 입력하고, 생성 후 AWS 계정 연결 단계로 이동합니다.
+ * @description 새 프로젝트 배포를 시작하기 위한 페이지입니다.
+ * Git 리포지토리 URL을 입력받습니다.
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper
+} from '@mui/material';
 
 const NewProjectPage: React.FC = () => {
-  const [projectName, setProjectName] = useState('');
+  const [repoUrl, setRepoUrl] = useState('');
   const navigate = useNavigate();
 
-  const handleCreateProject = () => {
-    // In a real app, you would make an API call here to create the project.
-    // For now, we'll just simulate it and navigate to the next step.
-    if (projectName.trim() === '') {
-      alert('Please enter a project name.');
+  const handleContinue = () => {
+    if (repoUrl.trim() === '') {
+      alert('Please provide the Git Repository URL.');
       return;
     }
     
-    console.log(`Creating project: ${projectName}`);
+    // In a real app, you would make an API call here to register the repoUrl.
+    console.log(`Starting deployment for repo: ${repoUrl}`);
     
-    // After "creating" the project, navigate to the AWS connection page.
+    // Navigate to the AWS connection page.
     navigate('/projects/new/connect-aws');
   };
 
   return (
-    <div>
-      <h2>Create a New Project</h2>
-      <p>Enter a name for your new project to begin.</p>
-      
-      <div style={{ marginTop: '2rem' }}>
-        <label htmlFor="projectName">Project Name</label>
-        <input
-          id="projectName"
-          type="text"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-          placeholder="my-awesome-project"
-          style={{ width: '100%', padding: '8px', boxSizing: 'border-box', marginTop: '0.5rem' }}
-        />
-      </div>
-
-      <button onClick={handleCreateProject} style={{ marginTop: '20px', padding: '10px 20px' }}>
-        Create Project and Connect AWS
-      </button>
-    </div>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Paper sx={{ p: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Deploy a New Project
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom>
+          Provide the Git repository URL to get started.
+        </Typography>
+        
+        <Box component="form" noValidate sx={{ mt: 3 }}>
+          <TextField
+            required
+            fullWidth
+            autoFocus // Focus this field on page load
+            id="repoUrl"
+            label="Git Repository URL"
+            name="repoUrl"
+            placeholder="https://github.com/user/repo.git"
+            value={repoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleContinue}
+            >
+              Continue to AWS Setup
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

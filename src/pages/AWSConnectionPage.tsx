@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  CircularProgress,
+  Alert
+} from '@mui/material';
 
 const AWSConnectionPage: React.FC = () => {
   const [roleArn, setRoleArn] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<{ type: 'success' | 'error' | null; message: string | null }>({
-    type: null,
-    message: null,
-  });
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // This would be fetched from the backend in a real scenario
@@ -15,121 +22,84 @@ const AWSConnectionPage: React.FC = () => {
 
   const handleConnect = async () => {
     if (roleArn.trim() === '') {
-      setConnectionStatus({ type: 'error', message: 'Please enter a Role ARN.' });
+      setError('Please enter a Role ARN.');
       return;
     }
 
     setIsLoading(true);
-    setConnectionStatus({ type: null, message: null });
+    setError(null);
 
     try {
-      // Simulate API call to backend
-      // In a real application, you would use fetch or axios here:
-      // const response = await fetch('/api/aws/verify-connection', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ roleArn, externalId, projectId: 'some-project-id' }),
-      // });
-      // const data = await response.json();
-
-      // Simulate network delay and backend response
+      // Simulate API call to backend for verification
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Simulate success or failure based on some condition (e.g., a specific ARN for testing)
-      if (roleArn.includes('success')) { // For demonstration: ARN containing 'success' will pass
-        setConnectionStatus({ type: 'success', message: 'AWS account connected successfully!' });
-        // In a real app, you might navigate to the project page after success
-        // navigate('/projects/some-project-id'); 
+      // Simulate success or failure based on input
+      if (roleArn.includes('success')) {
+        // On success, navigate to the deployment status page to start the deployment
+        navigate('/deployment-status');
       } else {
-        setConnectionStatus({ type: 'error', message: 'Failed to connect. Please check your Role ARN and IAM role settings (especially External ID and permissions).' });
+        setError('Failed to connect. Please check your Role ARN and IAM role settings.');
       }
-    } catch (error) {
-      console.error('Connection error:', error);
-      setConnectionStatus({ type: 'error', message: 'An unexpected error occurred during connection.' });
+    } catch (e) {
+      setError('An unexpected error occurred during connection.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Connect to AWS</h1>
-      <p>Follow these steps to connect your AWS account for automated deployment.</p>
-      
-      <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '5px', marginTop: '1rem' }}>
-        <h3>Step 1: Configure IAM Role in your AWS Account</h3>
-        <p>1. Sign in to your AWS Management Console and open the IAM console.</p>
-        <p>2. In the navigation pane, choose <strong>Roles</strong>, and then choose <strong>Create role</strong>.</p>
-        <p>3. For trusted entity type, select <strong>AWS account</strong>.</p>
-        <p>4. Under 'An AWS account', select <strong>Another AWS account</strong> and enter the Account ID below:</p>
-        <p><strong>495236580665</strong> (D-light's AWS Account ID)</p>
-        <p>5. Under 'Options', check the box for <strong>Require external ID</strong> and enter the following value:</p>
-        <p><strong>{externalId}</strong></p>
-        <p>6. Attach the necessary permissions policies required for deployment (e.g., for Amazon S3, CloudFront).</p>
-        <p>7. Complete the role creation process and copy the generated <strong>Role ARN</strong>.</p>
-      </div>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Paper sx={{ p: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Connect to AWS
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom>
+          Follow the steps below, then paste the generated Role ARN to start the deployment.
+        </Typography>
 
-      <div style={{ marginTop: '2rem' }}>
-        <h3>Step 2: Submit the Role ARN</h3>
-        <p>Paste the Role ARN you copied from the AWS console in the field below.</p>
-        <input
-          type="text"
-          value={roleArn}
-          onChange={(e) => setRoleArn(e.target.value)}
-          placeholder="arn:aws:iam::123456789012:role/YourRoleName"
-          style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          disabled={isLoading}
-        />
-      </div>
+        <Box sx={{ border: '1px solid #ccc', p: 2, borderRadius: 1, mt: 3, mb: 3 }}>
+          <Typography variant="h6">Step 1: Configure IAM Role in AWS</Typography>
+          <ol>
+            <li>Sign in to your AWS Console and open the IAM service.</li>
+            <li>Go to <strong>Roles</strong> and click <strong>Create role</strong>.</li>
+            <li>For trusted entity type, select <strong>AWS account</strong>.</li>
+            <li>Under 'An AWS account', select <strong>Another AWS account</strong> and enter the Account ID: <strong>495236580665</strong></li>
+            <li>Under 'Options', check <strong>Require external ID</strong> and enter: <strong>{externalId}</strong></li>
+            <li>Attach the necessary permissions policies for deployment.</li>
+            <li>Complete the role creation and copy the <strong>Role ARN</strong>.</li>
+          </ol>
+        </Box>
 
-      <button 
-        onClick={handleConnect} 
-        style={{
-          marginTop: '20px', 
-          padding: '10px 20px',
-          backgroundColor: isLoading ? '#cccccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: isLoading ? 'not-allowed' : 'pointer',
-        }}
-        disabled={isLoading}
-      >
-        {isLoading ? 'Connecting...' : 'Verify & Connect'}
-      </button>
-
-      {connectionStatus.message && (
-        <div 
-          style={{
-            marginTop: '20px',
-            padding: '10px',
-            borderRadius: '5px',
-            backgroundColor: connectionStatus.type === 'success' ? '#d4edda' : '#f8d7da',
-            color: connectionStatus.type === 'success' ? '#155724' : '#721c24',
-            borderColor: connectionStatus.type === 'success' ? '#c3e6cb' : '#f5c6cb',
-            border: '1px solid',
-          }}
-        >
-          {connectionStatus.message}
-          {connectionStatus.type === 'success' && (
-            <button 
-              onClick={() => navigate('/dashboard')} 
-              style={{
-                marginLeft: '15px',
-                padding: '5px 10px',
-                backgroundColor: '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '3px',
-                cursor: 'pointer',
-              }}
+        <Box component="form" noValidate sx={{ mt: 2 }}>
+          <Typography variant="h6">Step 2: Submit Role ARN</Typography>
+          <TextField
+            required
+            fullWidth
+            id="roleArn"
+            label="AWS Role ARN"
+            name="roleArn"
+            placeholder="arn:aws:iam::123456789012:role/YourRoleName"
+            value={roleArn}
+            onChange={(e) => setRoleArn(e.target.value)}
+            disabled={isLoading}
+            sx={{ mb: 2 }}
+          />
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              disabled={isLoading}
+              onClick={handleConnect}
+              startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              Go to Dashboard
-            </button>
-          )}
-        </div>
-      )}
-    </div>
+              {isLoading ? 'Verifying...' : 'Verify & Start Deployment'}
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

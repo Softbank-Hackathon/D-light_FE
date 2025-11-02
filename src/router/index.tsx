@@ -1,20 +1,13 @@
-
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import LoginPage from '../pages/LoginPage';
-import DashboardPage from '../pages/DashboardPage';
 import NewProjectPage from '../pages/NewProjectPage';
-import ProjectPage from '../pages/ProjectPage';
-import DeploymentPage from '../pages/DeploymentPage';
 import AWSConnectionPage from '../pages/AWSConnectionPage';
-
 import HomePage from '../pages/HomePage';
+import DeploymentStatusPage from '../pages/DeploymentStatusPage';
+
+// Note: The DeploymentStatusPage will be added later.
 
 export const router = createBrowserRouter([
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
   {
     path: '/',
     element: <MainLayout />,
@@ -22,10 +15,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-      },
-      {
-        path: 'dashboard',
-        element: <DashboardPage />,
       },
       {
         path: 'new',
@@ -36,13 +25,10 @@ export const router = createBrowserRouter([
         element: <AWSConnectionPage />,
       },
       {
-        path: 'projects/:projectId',
-        element: <ProjectPage />,
+        path: '/deployment-status',
+        element: <DeploymentStatusPage />,
       },
-      {
-        path: 'deployments/:deploymentId',
-        element: <DeploymentPage />,
-      },
+      // The route for the deployment status page will be added here.
     ],
   },
 ]);
