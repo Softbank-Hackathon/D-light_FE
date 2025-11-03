@@ -1,3 +1,8 @@
+/**
+ * @file HomePage.tsx
+ * @description 최초 랜딩 및 서비스를 설명하기 위한 페이지입니다.
+ * 시작 버튼을 통해 배포를 시작할 수 있습니다.
+ */
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,7 +22,7 @@ const HomePage: React.FC = () => {
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleStart = () => {
-    navigate("/new");
+    navigate("/deploy");
   };
 
   return (
@@ -34,7 +39,7 @@ const HomePage: React.FC = () => {
           px: 2, // Add some horizontal padding
         }}
       >
-        <Box sx={{ mb: "20vh" }}>
+        <Box sx={{ mb: "10vh" }}>
           {" "}
           {/* Add margin to push content up */}
           <Typography variant="h2" component="h1" gutterBottom mb={4}>
