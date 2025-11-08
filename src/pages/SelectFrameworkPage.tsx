@@ -1,76 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  List,
-  ListItemButton,
-  useTheme,
-} from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import { Box, Paper, Typography, Button, Grid, useTheme } from "@mui/material";
 import StepIndicator from "../components/StepIndicator";
+import FrameworkCard from "../components/FrameworkCard";
 import { useProject } from "../contexts/ProjectContext";
 import { commonPaperStyles } from "../styles/commonStyles";
 
-// --- 1. 타입 정의 및 더미 데이터 ---
-const FRAMEWORK_OPTIONS = [
-  "React",
-  "Vue.js",
-  "Vanilla JS",
-  "Angular",
-  "Svelte",
+// --- 1. 아이콘 임포트 ---
+import reactIcon from "../assets/react-icon.png";
+import vueIcon from "../assets/vue-icon.png";
+import angularIcon from "../assets/angular-icon.png";
+import jsIcon from "../assets/vanilla-icon.png";
+import svelteIcon from "../assets/svelte-icon.png";
+
+// --- 2. 프레임워크 데이터 ---
+const frameworks = [
+  { name: "React", icon: reactIcon },
+  { name: "Vue.js", icon: vueIcon },
+  { name: "Angular", icon: angularIcon },
+  { name: "Vanilla JS", icon: jsIcon },
+  { name: "Svelte", icon: svelteIcon },
 ];
 
-// --- 2. Props 정의 ---
+// --- 3. Props 정의 ---
 interface SelectFrameworkPageProps {
   stepIndex?: number;
   totalSteps?: number;
 }
-
-// --- 3. 하위 컴포넌트 구현 ---
-
-// 프레임워크 선택기
-const FrameworkSelector: React.FC<{
-  options: string[];
-  selectedValue: string | null;
-  onSelect: (value: string) => void;
-}> = ({ options, selectedValue, onSelect }) => {
-  const theme = useTheme();
-  return (
-    <List
-      role="radiogroup"
-      sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
-    >
-      {options.map((option) => {
-        const isSelected = selectedValue === option;
-        return (
-          <ListItemButton
-            key={option}
-            role="radio"
-            aria-checked={isSelected}
-            selected={isSelected}
-            onClick={() => onSelect(option)}
-            sx={{
-              height: "48px",
-              borderRadius: "12px",
-              border: `1px solid ${theme.palette.custom.border}`,
-              justifyContent: "space-between",
-              "&.Mui-selected": {
-                border: `2px solid ${theme.palette.primary.main}`,
-                backgroundColor: "action.hover",
-              },
-            }}
-          >
-            <Typography>{option}</Typography>
-            {isSelected && <CheckCircleRoundedIcon color="primary" />}
-          </ListItemButton>
-        );
-      })}
-    </List>
-  );
-};
 
 // --- 4. 메인 페이지 컴포넌트 ---
 
@@ -94,6 +50,10 @@ const SelectFrameworkPage: React.FC<SelectFrameworkPageProps> = ({
     }
   };
 
+  const handleSelect = (name: string) => {
+    setSelectedFramework(name);
+  };
+
   return (
     <Box
       sx={{
@@ -107,24 +67,35 @@ const SelectFrameworkPage: React.FC<SelectFrameworkPageProps> = ({
       <Paper elevation={0} sx={commonPaperStyles}>
         {/* 상단 컨텐츠 영역 */}
         <Box sx={{ flexGrow: 1 }}>
-          <Box>
+          <Box mb={3}>
             <Typography
-              variant="h5"
-              component="h2"
+              variant="h4"
+              component="h1"
               sx={{ fontWeight: "bold", mb: 0.5 }}
             >
               2. Select Framework
             </Typography>
-            <Typography color="text.secondary" sx={{ mb: 3 }}>
+            <Typography color="text.secondary">
               Select the framework of your project, between React, Vue.js,
               Angular, Vanilla JS, Svelte
             </Typography>
-            <FrameworkSelector
-              options={FRAMEWORK_OPTIONS}
-              selectedValue={selectedFramework}
-              onSelect={setSelectedFramework}
-            />
           </Box>
+
+          <Grid container spacing={3} role="radiogroup">
+            {frameworks.map((framework) => (
+              <Grid
+                key={framework.name}
+                size={{ xs: 12, sm: 6, md: 4, lg: 2.4 }}
+              >
+                <FrameworkCard
+                  name={framework.name}
+                  icon={framework.icon}
+                  selected={selectedFramework === framework.name}
+                  onClick={() => handleSelect(framework.name)}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Box>
 
         {/* 푸터 섹션 */}

@@ -1,9 +1,15 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Typography, CircularProgress, useTheme, Paper } from '@mui/material';
-import axios from '../api/axiosInstance';
-import { useProject } from '../contexts/ProjectContext';
-import { commonPaperStyles } from '../styles/commonStyles';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  useTheme,
+  Paper,
+} from "@mui/material";
+import axios from "../api/axiosInstance";
+import { useProject } from "../contexts/ProjectContext";
+import { commonPaperStyles } from "../styles/commonStyles";
 
 const DeploymentPage: React.FC = () => {
   const theme = useTheme();
@@ -12,10 +18,19 @@ const DeploymentPage: React.FC = () => {
 
   useEffect(() => {
     // 모든 필수 정보가 context에 있는지 확인
-    if (!project || !project.repo || !project.projectName || !project.framework || !project.region || !project.roleArn || !project.externalId || !project.branch) {
+    if (
+      !project ||
+      !project.repo ||
+      !project.projectName ||
+      !project.framework ||
+      !project.region ||
+      !project.roleArn ||
+      !project.externalId ||
+      !project.branch
+    ) {
       // 정보가 불완전하면 dashboard로 리디렉션
-      console.error('Project configuration is incomplete');
-      navigate('/dashboard');
+      console.error("Project configuration is incomplete");
+      navigate("/dashboard");
       return;
     }
 
@@ -24,7 +39,7 @@ const DeploymentPage: React.FC = () => {
       // API 요청 본문 구성
       const deploymentData = {
         githubRepositoryUrl: project.repo.html_url,
-        projectType: project.projectType || 'frontend',
+        projectType: project.projectType || "frontend",
         frameworkType: project.framework!,
         branch: project.branch!,
         region: project.region!,
@@ -34,15 +49,18 @@ const DeploymentPage: React.FC = () => {
       };
 
       try {
-        const response = await axios.post('/api/v1/deployments', deploymentData);
+        const response = await axios.post(
+          "/api/v1/deployments",
+          deploymentData
+        );
         const { deploymentId } = response.data;
-        
+
         // 배포 상태 페이지로 이동
         navigate(`/status?deploymentId=${deploymentId}`);
       } catch (error) {
-        console.error('Failed to start deployment:', error);
+        console.error("Failed to start deployment:", error);
         // 에러 발생 시에도 status 페이지로 이동 (에러 처리는 status 페이지에서)
-        navigate('/status?error=deployment_failed');
+        navigate("/status?error=deployment_failed");
       }
     };
 
