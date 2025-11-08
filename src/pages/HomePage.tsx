@@ -15,24 +15,21 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Storage, CloudUpload, CheckCircle } from "@mui/icons-material";
-import { useAuth } from "../contexts/AuthContext"; // useAuth import 추가
+import { useAuth } from "../contexts/AuthContext";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-  const { isAuthenticated, loading } = useAuth(); // useAuth 훅 사용
+  const { isAuthenticated, loading, login } = useAuth();
 
   const handleStart = () => {
     if (!loading) {
-      // 임시로 로그인 여부와 상관없이 대시보드로 이동
-      navigate("/dashboard");
-      // 원래 로직:
-      // if (isAuthenticated) {
-      //   navigate("/dashboard"); // 로그인 되어 있으면 대시보드로 이동
-      // } else {
-      //   login(); // 로그인 되어 있지 않으면 로그인 프로세스 시작
-      // }
+      if (isAuthenticated) {
+        navigate("/aws-assume-role");
+      } else {
+        login();
+      }
     }
   };
 
@@ -81,7 +78,7 @@ const HomePage: React.FC = () => {
               {loading
                 ? "Loading..."
                 : isAuthenticated
-                ? "Go to Dashboard"
+                ? "Continue to Setup"
                 : "Get Started"}
             </Button>
           </Box>

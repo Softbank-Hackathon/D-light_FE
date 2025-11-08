@@ -12,6 +12,7 @@ import DeploymentPage from "../pages/DeploymentPage";
 import DeploymentStatusPage from "../pages/DeploymentStatusPage";
 import ApiTestPage from "../pages/ApiTestPage";
 import ProtectedRoute from "../components/ProtectedRoute";
+import AWSRoleAssumePage from "../pages/AWSRoleAssumePage";
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ export const router = createBrowserRouter([
                 <ApiTestPage />
               </ProtectedRoute>
             ),
+          },
+          {
+            path: "aws-assume-role",
+            element: <AWSRoleAssumePage />,
           },
         ],
       },
