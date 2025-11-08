@@ -41,9 +41,12 @@ const SelectRepoPage: React.FC<SelectRepoPageProps> = ({
   const filteredRepos = useSearchFilter(dummyRepos, searchQuery, "fullName");
 
   // 커스텀 훅 사용: 브랜치 로딩
-  const { branches, loading: loadingBranches, selectedBranch, setSelectedBranch } = useBranchLoader(
-    selectedRepo?.id || null
-  );
+  const {
+    branches,
+    loading: loadingBranches,
+    selectedBranch,
+    setSelectedBranch,
+  } = useBranchLoader(selectedRepo?.id || null);
 
   const handleRepoSelect = (repo: Repo) => {
     setSelectedRepo(repo);
@@ -142,10 +145,7 @@ const SelectRepoPage: React.FC<SelectRepoPageProps> = ({
 
               {/* 브랜치 선택 섹션 */}
               <Box>
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", mb: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
                   Select Branch
                 </Typography>
                 <BranchList

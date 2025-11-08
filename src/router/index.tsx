@@ -50,6 +50,22 @@ export const router = createBrowserRouter([
             ),
           },
           {
+            path: "select-framework-new",
+            element: (
+              <ProtectedRoute>
+                <SelectFrameworkPageNew />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "select-region",
+            element: (
+              <ProtectedRoute>
+                <SelectRegionPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
             path: "connect",
             element: (
               <ProtectedRoute>

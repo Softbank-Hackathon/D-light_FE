@@ -30,7 +30,7 @@ const BranchList: React.FC<BranchListProps> = ({
           alignItems: "center",
           justifyContent: "center",
           border: `1px solid ${theme.palette.custom.border}`,
-          borderRadius: "12px",
+          borderRadius: "0px",
           mt: 2,
         }}
       >
@@ -48,7 +48,7 @@ const BranchList: React.FC<BranchListProps> = ({
           alignItems: "center",
           justifyContent: "center",
           border: `1px solid ${theme.palette.custom.border}`,
-          borderRadius: "12px",
+          borderRadius: "0px",
           mt: 2,
         }}
       >
@@ -65,7 +65,7 @@ const BranchList: React.FC<BranchListProps> = ({
         height: "200px",
         overflowY: "auto",
         border: `1px solid ${theme.palette.custom.border}`,
-        borderRadius: "12px",
+        borderRadius: "0px",
         mt: 2,
       }}
     >
