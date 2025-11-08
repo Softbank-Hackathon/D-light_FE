@@ -14,25 +14,23 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { Storage, CloudUpload, CheckCircle } from "@mui/icons-material";
-import { useAuth } from "../contexts/AuthContext"; // useAuth import 추가
+import { CloudUpload, CheckCircle } from "@mui/icons-material";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import { useAuth } from "../contexts/AuthContext";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-  const { isAuthenticated, loading } = useAuth(); // useAuth 훅 사용
+  const { isAuthenticated, loading, login } = useAuth();
 
   const handleStart = () => {
     if (!loading) {
-      // 임시로 로그인 여부와 상관없이 대시보드로 이동
-      navigate("/dashboard");
-      // 원래 로직:
-      // if (isAuthenticated) {
-      //   navigate("/dashboard"); // 로그인 되어 있으면 대시보드로 이동
-      // } else {
-      //   login(); // 로그인 되어 있지 않으면 로그인 프로세스 시작
-      // }
+      if (isAuthenticated) {
+        navigate("/aws-assume-role");
+      } else {
+        login();
+      }
     }
   };
 
@@ -65,10 +63,8 @@ const HomePage: React.FC = () => {
             sx={{ maxWidth: "600px" }}
             mb={8}
           >
-            {" "}
-            {/* Added mb={4} */}
-            Your ultimate solution for seamless and automated deployments
-            directly from a Git repository.
+            All you need to do is log in with GitHub <br />
+            and select a project — then deploy.
           </Typography>
           <Box sx={{ mt: 8 }}>
             <Button
@@ -81,7 +77,7 @@ const HomePage: React.FC = () => {
               {loading
                 ? "Loading..."
                 : isAuthenticated
-                ? "Go to Dashboard"
+                ? "Continue to Setup"
                 : "Get Started"}
             </Button>
           </Box>
@@ -118,16 +114,49 @@ const HomePage: React.FC = () => {
           >
             <Paper
               data-aos="fade-up"
-              sx={{ p: 4, textAlign: "center", height: "100%" }}
+              sx={{
+                p: 4,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <Storage sx={{ fontSize: 60, color: "primary.main" }} />
-              <Typography variant="h5" component="h3" sx={{ mt: 2, mb: 1 }}>
-                1. Provide Repository
-              </Typography>
-              <Typography>
-                Just give us the URL of your Git repository. No complex setup,
-                no authentication needed.
-              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <GitHubIcon sx={{ fontSize: 60, color: "primary.main" }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h5" component="h3">
+                  1. Sign in with GitHub
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  flex: 2,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography>
+                  Connect your GitHub account securely. We’ll automatically load
+                  your repositories and branches — no manual setup required.
+                </Typography>
+              </Box>
             </Paper>
           </Box>
           <Box
@@ -140,16 +169,51 @@ const HomePage: React.FC = () => {
             <Paper
               data-aos="fade-up"
               data-aos-delay="200"
-              sx={{ p: 4, textAlign: "center", height: "100%" }}
+              sx={{
+                p: 4,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <CloudUpload sx={{ fontSize: 60, color: "primary.main" }} />
-              <Typography variant="h5" component="h3" sx={{ mt: 2, mb: 1 }}>
-                2. Connect AWS
-              </Typography>
-              <Typography>
-                Create a secure role in your AWS account and provide us with the
-                Role ARN. Your credentials are never shared.
-              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CloudUpload sx={{ fontSize: 60, color: "primary.main" }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h5" component="h3">
+                  2. One-Click AWS Setup
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  flex: 2,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography>
+                  Create your AWS S3 bucket and IAM Role with a single
+                  CloudFormation stack. A built-in Lambda + Webhook
+                  automatically sends the Role ARN to our backend for secure
+                  integration.
+                </Typography>
+              </Box>
             </Paper>
           </Box>
           <Box
@@ -162,16 +226,50 @@ const HomePage: React.FC = () => {
             <Paper
               data-aos="fade-up"
               data-aos-delay="400"
-              sx={{ p: 4, textAlign: "center", height: "100%" }}
+              sx={{
+                p: 4,
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <CheckCircle sx={{ fontSize: 60, color: "primary.main" }} />
-              <Typography variant="h5" component="h3" sx={{ mt: 2, mb: 1 }}>
-                3. Deploy!
-              </Typography>
-              <Typography>
-                We handle the rest. We clone your repository, build your
-                project, and deploy it seamlessly.
-              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CheckCircle sx={{ fontSize: 60, color: "primary.main" }} />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h5" component="h3">
+                  3. Select Repository, <br /> Branch & Framework
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  flex: 2,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Typography>
+                  Select your GitHub repository and branch. We auto-detect your
+                  framework (React, Next.js, Vite, etc.), but you can override
+                  it anytime.
+                </Typography>
+              </Box>
             </Paper>
           </Box>
         </Box>

@@ -7,11 +7,11 @@ import { useProject } from "../contexts/ProjectContext";
 import { commonPaperStyles } from "../styles/commonStyles";
 
 // --- 1. 아이콘 임포트 ---
-import reactIcon from "../assets/react-icon.png";
-import vueIcon from "../assets/vue-icon.png";
-import angularIcon from "../assets/angular-icon.png";
-import jsIcon from "../assets/vanilla-icon.png";
-import svelteIcon from "../assets/svelte-icon.png";
+import reactIcon from "../assets/react-icon.svg";
+import vueIcon from "../assets/vue-icon.svg";
+import angularIcon from "../assets/angular-icon.svg";
+import jsIcon from "../assets/vanilla-icon.svg";
+import svelteIcon from "../assets/svelte-icon.svg";
 
 // --- 2. 프레임워크 데이터 ---
 const frameworks = [
