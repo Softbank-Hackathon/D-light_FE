@@ -66,8 +66,8 @@ const SelectRegionPage: React.FC<SelectRegionPageProps> = ({
         <Box sx={{ flexGrow: 1 }}>
           <Box>
             <Typography
-              variant="h5"
-              component="h2"
+              variant="h4"
+              component="h1"
               sx={{ fontWeight: "bold", mb: 0.5 }}
             >
               3. Select Region
